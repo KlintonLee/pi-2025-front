@@ -8,10 +8,15 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.use(express.static(path.join(__dirname, 'dist')));
+// Caminho absoluto para a pasta "dist"
+const distPath = path.join(__dirname, 'dist');
 
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+// Servir arquivos estáticos
+app.use(express.static(distPath));
+
+// Fallback manual para SPA (Vue Router)
+app.get('/*', (req, res) => {
+  res.sendFile(path.join(distPath, 'index.html'));
 });
 
 app.listen(port, () => {
