@@ -11,22 +11,20 @@
         ></v-carousel-item>
       </v-carousel>
     
-        <div class="card-content">
-          <h3>{{ feed.titulo}}</h3>
-          <p>{{ feed.descricao }}</p>
-        <div v-if="feeds.length === 0" class="no-feeds">
-          <p>Não há feeds disponíveis no momento.</p>
+      <div class="card-content">
+        <h3>{{ feed.titulo}}</h3>
+        <p>{{ feed.descricao }}</p>
+      
+        <div v-if="exist" class="acoes">
+          <v-btn icon color="primary" @click="openEdit(feed)">
+            <v-icon>mdi-pencil</v-icon>
+          </v-btn>
+          <v-btn icon color="error" @click="deleteFeed(feed.id)">
+            <v-icon>mdi-delete</v-icon>
+          </v-btn>
         </div>
       </div>
-
-      <div class="acoes" v-if="exist">
-        <v-btn icon color="primary" @click="openEdit(feed)">
-          <v-icon>mdi-pencil</v-icon>
-        </v-btn>
-        <v-btn icon color="error" @click="deleteFeed(feed.id)">
-          <v-icon>mdi-delete</v-icon>
-        </v-btn>
-      </div>
+      
     </div>
   </div>
   
@@ -113,8 +111,6 @@ const deleteFeed = async (id) => {
         'x-auth-token': token,
       }
     });
- 
-    isLoading.value = false
     await getData(); 
   } catch (error) {
     console.error('Erro ao deletar feed:', error);
@@ -165,7 +161,9 @@ defineExpose({
 
 .card-content p {
   margin: 8px 0 0;
+  max-height: 120px;
   color: #555;
+  overflow-y: auto;
 }
 
 .acoes {
