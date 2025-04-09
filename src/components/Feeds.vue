@@ -1,5 +1,6 @@
 <template>
   <div class="feeds">
+    <loading :loading="isLoading" :text="text"/>
     <div v-for="(feed, index) in feeds" :key="index" class="card">
       <v-carousel :show-arrows="false" cycle height="300">
         <v-carousel-item
@@ -44,11 +45,16 @@ import { ref, onMounted, watch } from "vue";
 import { useRouter } from "vue-router";
 import RegisterFeed from "../components/RegisterFeed.vue";
 import api from "../services/api.js";
+import loading from './loading.vue';
+
+
 const router = useRouter();
 
 const isOpen = ref(false);
 const edit = ref(false);
 const exist = ref(localStorage.getItem('token'))
+const isLoading = ref(false);
+const text = ref('');
 
 
 const form = ref({
@@ -68,7 +74,15 @@ const openEdit = (feed) => {
 
 
 const getData = async () => {
+  isLoading.value = true
+  
   const token = localStorage.getItem('token');
+
+  setTimeout(() => {
+  isLoading.value = false
+}, 2000)
+
+
   try {
     const { data } = await api.get('/v1/feeds', {
       headers: {
@@ -78,17 +92,20 @@ const getData = async () => {
 
     feeds.value = data
 
+    isLoading.value = false
   } catch (error) {
     console.error('Erro ao buscar feeds:', error);
   }
 };
 
 
-const loadFeeds = () => {
-  getData();
+const loadFeeds = async() => {
+  await getData();
 }
 
 const deleteFeed = async (id) => {
+  text.value = 'Deletando feed...'
+  isLoading.value = true
   const token = localStorage.getItem('token');
   try {
     await api.delete(`/v1/feeds/${id}`, {
@@ -96,15 +113,23 @@ const deleteFeed = async (id) => {
         'x-auth-token': token,
       }
     });
-    getData(); 
+ 
+    isLoading.value = false
+    await getData(); 
   } catch (error) {
     console.error('Erro ao deletar feed:', error);
   }
 };
 
 onMounted(() => {
+  isLoading.value = true
+
+    setTimeout(() => {
+    isLoading.value = false
+  }, 1500)
+
   loadFeeds();
-});
+})
 
 defineExpose({
   loadFeeds

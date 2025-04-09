@@ -1,5 +1,6 @@
 <template>
   <v-dialog v-model="props.isOpen" max-width="600px">
+    <loading :loading="isLoading" :text="text"/>
     <v-card>
       <v-card-title>
         <span class="text-h5 title__register">{{
@@ -65,6 +66,7 @@
 <script setup>
 import { ref, watch } from "vue";
 import api from "../services/api.js";
+import loading from './loading.vue';
 
 const props = defineProps({
   isOpen: {
@@ -95,6 +97,8 @@ const name = ref("");
 const description = ref("");
 const images = ref([]); 
 const newImageUrl = ref("");
+const isLoading = ref(false);
+const text = ref('');
 
 const addImageUrl = () => {
   const trimmed = newImageUrl.value.trim();
@@ -127,6 +131,9 @@ watch(
 
 
 const submit = async () => {
+  isLoading.value = true;
+  text.value = 'Cadastrando...'
+  
   const token = localStorage.getItem("token");
   try {
     const { data } = await api.post(
@@ -143,6 +150,7 @@ const submit = async () => {
     );
 
     await submitImagens(data.id);
+ 
   } catch (error) {
     console.error("Erro ao enviar dados:", error);
     throw error;
@@ -172,6 +180,7 @@ const submitImagens = async (id) => {
         }
       );
     }
+    isLoading.value = false;
   } catch (error) {
     console.error("Erro ao enviar imagens:", error);
   }  finally {
@@ -185,6 +194,8 @@ const submitImagens = async (id) => {
 
 
 const updateFeed = async () => {
+  isLoading.value = true;
+  text.value = 'Atualizando...'
   const token = localStorage.getItem("token");
 
   try {
@@ -236,6 +247,8 @@ const updateFeed = async () => {
         },
       });
     }
+
+    isLoading.value = false;
 
     emit("updatedFeeds");
     emit("close");

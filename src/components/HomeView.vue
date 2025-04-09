@@ -1,5 +1,6 @@
 <template>
   <div class="dflex__home">
+    <loading :loading="isLoading" :text="text"/>
     <div :class="{ header: exist }" class="dflex__exist">
       <v-menu open-on-hover v-if="exist">
         <template v-slot:activator="{ props }">
@@ -83,12 +84,15 @@
 <script setup>
 import Feeds from "../components/Feeds.vue";
 import RegisterFeed from "../components/RegisterFeed.vue";
+import loading from "./loading.vue";
 
 import { ref } from "vue";
 
 const items = [{ title: "SAIR" }];
 const feedsRef = ref(null);
 const exist = ref(localStorage.getItem("token"));
+const isLoading = ref(false);
+const text = ref("");
 
 const updatedFeeds = () => {
   feedsRef.value?.loadFeeds?.();
@@ -97,11 +101,17 @@ const updatedFeeds = () => {
 const isOpen = ref(false);
 
 const clear = () => {
+  isLoading.value = true;
+  text.value = "Saindo...";
+
   localStorage.clear();
+
   setTimeout(() => {
+    isLoading.value = false;
     window.location.href = "/login";
   }, 1000);
 };
+
 
 const redirectToWhatsApp = () => {
   const phoneNumber = "+5514998050967";

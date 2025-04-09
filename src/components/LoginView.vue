@@ -1,5 +1,8 @@
 <template>
+
     <div class="dflex__login">
+       <loading :loading="isLoading" text="Logando..."/>
+
       <div class="background__login">
         <h1>Bem-vindo ao nosso sistema!</h1>
         <p>Por favor, faça login para continuar.</p>
@@ -29,16 +32,18 @@
 <script setup>
 import { ref } from 'vue'
 import api from "../services/api.js";
+import loading from './loading.vue';
 
 
 const email = ref('')
 const senha = ref('')
 const snackbar = ref(false)
+const isLoading = ref(false)
 const snackbarMessage = ref('')
 const typeSnackbar = ref('')
 
 const fazerLogin = async() => {
-    
+    isLoading.value = true
     try {
         const token = await api.post('/v1/admins', {
             email: email.value,
@@ -47,13 +52,12 @@ const fazerLogin = async() => {
 
         localStorage.setItem('token', token.data)
 
-        snackbar.value = true
-        snackbarMessage.value = 'Login realizado com sucesso!'
-        typeSnackbar.value = 'success'
 
         setTimeout(() => {
             window.location.href = '/'
         }, 1000)
+        isLoading.value = false
+
      } catch(e){
         console.error(e)
         snackbar.value = true
