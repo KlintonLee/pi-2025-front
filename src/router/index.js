@@ -3,7 +3,7 @@ import HomeView from '../components/HomeView.vue'
 
 const routes = [
   {
-    path: '/',
+    path: '/home',
     name: 'home',
     component: HomeView
   },

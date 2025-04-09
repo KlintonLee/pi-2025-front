@@ -52,7 +52,7 @@ const fazerLogin = async() => {
         typeSnackbar.value = 'success'
 
         setTimeout(() => {
-            window.location.href = '/home/feeds'
+            window.location.href = '/home'
         }, 1000)
      } catch(e){
         console.error(e)
