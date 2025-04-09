@@ -60,9 +60,19 @@ const fazerLogin = async() => {
 
      } catch(e){
         console.error(e)
+        isLoading.value = false
         snackbar.value = true
         snackbarMessage.value = 'Usuário ou senha inválidos. Tentar novamente.'
         typeSnackbar.value = 'error'
+
+
+        e.response.status === 401
+            ? (snackbarMessage.value = 'Usuário ou senha inválidos. Tentar novamente.')
+            : (snackbarMessage.value = 'Erro ao fazer login. Tente novamente mais tarde.')
+        localStorage.clear();
+        email.value = ''
+        senha.value = ''
+
     }
 }
 </script>

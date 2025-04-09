@@ -173,4 +173,16 @@ defineExpose({
   padding: 40px 16px;
   gap: 10px;
 }
+
+@media (max-width: 600px) {
+  .card {
+    font-size: 12px;
+  }
+
+  .acoes {
+    padding: 8px 16px;
+    gap: 5px;
+  }
+}
+
 </style>

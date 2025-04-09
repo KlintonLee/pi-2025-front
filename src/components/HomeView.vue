@@ -31,7 +31,9 @@
           @click="redirectToWhatsApp"
         >
           <v-icon left>mdi-file-document-outline</v-icon>
-          Orçamento Gratuito Para Tupã e região
+           <p class="orcamento"> 
+            Orçamento Gratuito Para Tupã e região
+           </p>
         </v-btn>
       </div>
 
@@ -217,7 +219,23 @@ const redirectToWhatsApp = () => {
   flex-direction: row;
 }
 
+.orcamento {
+  font-size: 12px;
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+}
 
+@media (max-width: 900px) {
+  .orcamento {
+    font-size: 10px;
+  }
+}
 
+@media (max-width: 600px) {
+  .orcamento {
+    font-size: 8px;
+  }
+}
 
 </style>
